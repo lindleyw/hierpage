@@ -1,7 +1,7 @@
 <?php
 /*
 Plugin Name: Hierarchical Pages
-Version: 1.6
+Version: 1.6.1
 Plugin URI: http://www.wlindley.com/website/hierpage/
 Description: Adds sidebar widgets to display a context-based list of "nearby" pages, and to display nested categories.
 Author: William Lindley
@@ -38,7 +38,7 @@ if (!class_exists('SRCS_WP_Widget')) {
       foreach ($option_menu as $option_name => $option) {
 	$checkval='';
 	$desc = '';
-	if ($option['desc'])
+	if (isset($option['desc']) && $option['desc'])
 	  $desc = "<br /><small>{$option['desc']}</small>";
 	switch ($option['type']) {
 	case 'checkbox':
@@ -85,7 +85,8 @@ class HierPageWidget extends SRCS_WP_Widget
 
     $output = '';
     
-    if(!$args['post_type'])$args['post_type'] = 'page';
+    if(!isset($args['post_type']) || !$args['post_type'])
+      $args['post_type'] = 'page';
 
     // Query pages.  NOTE: The array is sorted in alphabetical, or menu, order.
     $pages = & get_pages($args);
@@ -126,10 +127,11 @@ class HierPageWidget extends SRCS_WP_Widget
 	}
 
 	// show the current page's children, if any.
-	if (is_array($page_info[$current_post]['children'] )) {
-	   foreach ( $page_info[$current_post]['children'] as $child ) {
-	      $page_info[$child]['show'] = 1;
-	   }
+	if (isset($page_info[$current_post]['children']) && 
+	    is_array($page_info[$current_post]['children'] )) {
+	  foreach ( $page_info[$current_post]['children'] as $child ) {
+	    $page_info[$child]['show'] = 1;
+	  }
 	}
 
 	$post_parent = $page_info[$current_post]['parent'];
@@ -169,11 +171,11 @@ class HierPageWidget extends SRCS_WP_Widget
       $my_includes = Array();
 
       foreach ( $pages as $page ) {
-	if ($page_info[$page->ID]['show']) {
+	if (isset($page_info[$page->ID]['show']) && $page_info[$page->ID]['show']) {
 	  $my_includes[] = $page->ID;
 	}
       }
-      if ($args['child_of']) {
+      if (isset($args['child_of']) && $args['child_of']) {
         $my_includes[] = $args['child_of'];
       }
       
@@ -210,7 +212,8 @@ class HierPageWidget extends SRCS_WP_Widget
       }
     }
       
-    if ($instance['menu_order'] == 'yes') { // Deprecated, eliminated upon form display (see below)
+    if (isset($instance['menu_order']) && $instance['menu_order'] == 'yes') { 
+      // Deprecated, eliminated upon form display (see below)
       $page_options['sort_column']='menu_order,post_title';
     }
 

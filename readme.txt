@@ -201,3 +201,6 @@ either of those two list functions directly.
 
 = 1.6 =
 * Handle case of no categories being returned.
+
+= 1.6.1 =
+* Add isset() calls to suppress error chatter about undefined array entries
