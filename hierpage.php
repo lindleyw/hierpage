@@ -302,7 +302,7 @@ function HierPageInit() {
 
 function HierPageLoad() {
   $plugin_dir = basename(dirname(__FILE__));
-  load_plugin_textdomain('hierarchical-pages', false, $plugin_dir);
+  load_plugin_textdomain('hierarchical-pages', false, $plugin_dir . '/languages');
 }
 
   /*
