@@ -468,7 +468,7 @@ class HierCatWidget extends SRCS_WP_Widget
     print "<ul>";
 
     $this->hiercat_list_cats($cat_options);
-    print "</ul>{$after_widget}";
+    print "</ul>{$args['after_widget']}";
   }
 
   /**
