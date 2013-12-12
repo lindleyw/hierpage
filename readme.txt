@@ -4,7 +4,7 @@ Author URI: http://www.wlindley.com/
 Donate link: http://www.wlindley.com/website/hierpage/
 Tags: pages, categories, taxonomy, taxonomies, child, sibling, collapsing, navigation, widget, hierarchy, hierarchical
 Requires at least: 2.8
-Tested up to: 3.4.1
+Tested up to: 3.8
 Stable tag: trunk
 
 Makes collapsing hierarchical pages/category/taxonomy lists: top level; ancestors, children, and/or siblings of current
@@ -204,3 +204,6 @@ either of those two list functions directly.
 
 = 1.6.1 =
 * Add isset() calls to suppress error chatter about undefined array entries
+* Completes the internationalization interface
+* If only the current page were to be listed, the output of the widget is
+  entirely suppressed.

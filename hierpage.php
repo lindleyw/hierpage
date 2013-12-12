@@ -199,7 +199,8 @@ class HierPageWidget extends SRCS_WP_Widget
 					'sort_column' => $args['sort_column'],
 					'sort_order' => $args['sort_order'],
 					'include' => $my_includes,
-                                        'post_type'=> $args['post_type']
+                                        'post_type'=> $args['post_type'],
+					'echo' => $args['echo']
                                         ) );
       }
     }
@@ -231,12 +232,14 @@ class HierPageWidget extends SRCS_WP_Widget
       $page_options['sort_column']='menu_order,post_title';
     }
 
-    print $args['before_widget'];
-    if ( $title )
-      print "{$args['before_title']}{$title}{$args['after_title']}";
-    print '<ul>';
-    $this->hierpages_list_pages($page_options);
-    print "</ul>{$args['after_widget']}";
+    $page_options['echo'] = 0;
+    $output = $this->hierpages_list_pages($page_options);
+    if (strlen($output)) {
+      print $args['before_widget'];
+      if ( $title )
+	print "{$args['before_title']}{$title}{$args['after_title']}";
+      print "<ul>{$output}</ul>{$args['after_widget']}";
+    }
   }
 
   function known_params ($options = 0) {
