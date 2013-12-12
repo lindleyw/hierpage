@@ -6,6 +6,7 @@ Plugin URI: http://www.wlindley.com/website/hierpage/
 Description: Adds sidebar widgets to display a context-based list of "nearby" pages, and to display nested categories.
 Author: William Lindley
 Author URI: http://www.wlindley.com/
+Text Domain: hierarchical-pages
 License: GPL2
 */
 
@@ -31,6 +32,8 @@ if (!class_exists('SRCS_WP_Widget')) {
   {
     function form_html($instance) {
       $option_menu = $this->known_params(1);
+      $tdom = 'hierarchical-pages';
+
       foreach (array_keys($option_menu) as $param) {
 	$param_display[$param] = htmlspecialchars($instance[$param]);
       }
@@ -39,7 +42,7 @@ if (!class_exists('SRCS_WP_Widget')) {
 	$checkval='';
 	$desc = '';
 	if (isset($option['desc']) && $option['desc'])
-	  $desc = "<br /><small>{$option['desc']}</small>";
+	  $desc = '<br /><small>' . __($option['desc'], $tdom) . '</small>';
 	switch ($option['type']) {
 	case 'checkbox':
 	  if ($instance[$option_name]) // special HTML and override value
@@ -51,7 +54,7 @@ if (!class_exists('SRCS_WP_Widget')) {
 	  break;
 	}
 	print '<p style="text-align:right;"><label for="' . $this->get_field_name($option_name) . '">' . 
-	  __($option['title']) . 
+	  __($option['title'], $tdom) . 
 	  ' <input style="width: 200px;" id="' . $this->get_field_id($option_name) . 
 	  '" name="' . $this->get_field_name($option_name) . 
 	  "\" type=\"{$option['type']}\" {$checkval}value=\"{$param_display[$option_name]}\" /></label>$desc</p>";
@@ -67,9 +70,11 @@ class HierPageWidget extends SRCS_WP_Widget
    *
    */
   function HierPageWidget(){
-    $widget_ops = array('classname' => 'widget_hier_page', 'description' => __( "Hierarchical Page Directory Widget") );
+    $tdom = 'hierarchical-pages';
+    $widget_ops = array('classname' => 'widget_hier_page',
+			'description' => __( "Hierarchical Page Directory Widget", $tdom) );
     $control_ops = array('width' => 300, 'height' => 300);
-    $this->WP_Widget('hierpage', __('Hierarchical Pages'), $widget_ops, $control_ops);
+    $this->WP_Widget('hierpage', __('Hierarchical Pages', $tdom), $widget_ops, $control_ops);
   }
 
   /**
@@ -295,6 +300,11 @@ function HierPageInit() {
   register_widget('HierPageWidget');
 }
 
+function HierPageLoad() {
+  $plugin_dir = basename(dirname(__FILE__));
+  load_plugin_textdomain('hierarchical-pages', false, $plugin_dir . '/languages');
+}
+
   /*
    * Plugin Name: Hierarchical Categories (combined with Hierarchical Pages)
    * Plugin URI: http://www.wlindley.com/
@@ -310,9 +320,10 @@ class HierCatWidget extends SRCS_WP_Widget
    *
    */
   function HierCatWidget(){
-    $widget_ops = array('classname' => 'widget_hier_cat', 'description' => __( "Hierarchical Category Widget") );
+    $tdom = 'hierarchical-pages';
+    $widget_ops = array('classname' => 'widget_hier_cat', 'description' => __( "Hierarchical Category Widget", $tdom) );
     $control_ops = array('width' => 300, 'height' => 300);
-    $this->WP_Widget('hiercat', __('Hierarchical Categories'), $widget_ops, $control_ops);
+    $this->WP_Widget('hiercat', __('Hierarchical Categories', $tdom), $widget_ops, $control_ops);
   }
 
   /**
@@ -368,7 +379,7 @@ class HierCatWidget extends SRCS_WP_Widget
 	    $cat_info[$child]['show'] = 1;
 	  }
 
-	  # Also show parent node's siblings.
+	  // Also show parent node's siblings.
 	  $cat_grandparent = $cat_info[$cat_parent]['parent'];
 	  if ($cat_grandparent) {
 	    foreach ( $cat_info[$cat_grandparent]['children'] as $child ) {
@@ -501,6 +512,7 @@ function HierCatInit() {
  */
 
 add_action('widgets_init', 'HierCatInit');
+add_action('plugins_loaded', 'HierPageLoad');
 add_action('widgets_init', 'HierPageInit');
 
 ?>
