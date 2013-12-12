@@ -126,16 +126,14 @@ class HierPageWidget extends SRCS_WP_Widget
       }
       
       if (is_post_type_hierarchical($args['post_type'])) {
-	if ($post->ID != $front_page ) {
-	  // The current page is always shown, unless it is the static front page (see above)
-	  $page_info[$post->ID]['show'] = 1;
-	}
 
+	$page_count = 0;
 	// show the current page's children, if any.
 	if (isset($page_info[$current_post]['children']) && 
 	    is_array($page_info[$current_post]['children'] )) {
 	  foreach ( $page_info[$current_post]['children'] as $child ) {
 	    $page_info[$child]['show'] = 1;
+	    $page_count++;
 	  }
 	}
 
@@ -145,6 +143,7 @@ class HierPageWidget extends SRCS_WP_Widget
 	  foreach ( $page_info[$post_parent]['children'] as $child ) {
 	    if ($child != $front_page) {
 	      $page_info[$child]['show'] = 1;
+	      $page_count++;
 	    }
 	  }
 
@@ -154,6 +153,7 @@ class HierPageWidget extends SRCS_WP_Widget
 	    foreach ( $page_info[$post_grandparent]['children'] as $child ) {
 	      if ($child != $front_page) {
 		$page_info[$child]['show'] = 1;
+		$page_count++;
 	      }
 	    }
 	  }
@@ -166,10 +166,19 @@ class HierPageWidget extends SRCS_WP_Widget
           if (is_array($page_info[$post_parent]['children'] )) {
             foreach ( $page_info[$post_parent]['children'] as $child ) {
               $page_info[$child]['show'] = 1;
+	      $page_count++;
             }
           }
 	  $post_parent = $page_info[$post_parent]['parent'];
 	}
+
+	if (($post->ID != $front_page) && ($page_count > 0) ) {
+	  // The current page is always shown, unless
+	  // 1. it is the static front page (see above), or
+	  // 2. no other pages are displayed
+	  $page_info[$post->ID]['show'] = 1;
+	}
+
       }
       
       // Add pages that were selected
