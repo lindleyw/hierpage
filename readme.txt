@@ -61,6 +61,9 @@ configuration screen, as follows:
   an exclude list.  These are comma-delimited lists of 
   ID numbers.  You may specify either include or exclude, not both.
 
+Spanish translation provided courtesy Andrew Kurtis of WebHostingHub.com
+Thanks, Andrew!
+
 == Installation ==
 
 This section describes how to install the plugin and get it working.
@@ -207,3 +210,4 @@ either of those two list functions directly.
 * Completes the internationalization interface
 * If only the current page were to be listed, the output of the widget is
   entirely suppressed.
+* Spanish translation provided courtesy Andrew Kurtis of WebHostingHub.com
